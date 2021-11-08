@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import Signin from './components/Auth/Signin';
 import Signup from './components/Auth/Signup';
 import Chat from './components/Chat/Chat';

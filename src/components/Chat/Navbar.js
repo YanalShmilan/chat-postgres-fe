@@ -32,7 +32,6 @@ export default function Navbar() {
     for (const key in userInfo) {
       formData.append(key, userInfo[key]);
     }
-    console.log(userInfo);
     if (userInfo.password === '') {
       formData.delete('password');
     }
@@ -53,7 +52,7 @@ export default function Navbar() {
         <img
           width="40"
           height="40"
-          src={user.avatar ? user.avatar : avatar}
+          src={!user.avatar.endsWith('null') ? user.avatar : avatar}
           alt="Avatar"
         />
         <p>

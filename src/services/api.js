@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { checkUser, signout } from '../store/actions/auth';
+import { signout } from '../store/actions/auth';
 const API = axios.create({
   baseURL: 'http://localhost:5000',
   headers: {

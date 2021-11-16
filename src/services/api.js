@@ -15,12 +15,12 @@ API.interceptors.response.use(
   },
   (err) => {
     if (err.response.status !== 401) {
-      throw err;
+      console.log(err);
     }
     if (typeof err.response.data.error.name !== 'undefined') {
       if (typeof err.response.data.error.name !== 'TokenExpiredError') {
         store.dispatch(signout());
-        throw err;
+        console.log(err);
       }
     }
   }

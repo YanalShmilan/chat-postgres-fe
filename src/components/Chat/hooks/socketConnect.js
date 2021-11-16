@@ -7,6 +7,7 @@ import {
   fetchChats,
   setSocket,
   recivedMessage,
+  senderTyping,
 } from '../../../store/actions/chat';
 function useSocket(user, dispatch) {
   useEffect(() => {
@@ -15,7 +16,7 @@ function useSocket(user, dispatch) {
       dispatch(setSocket(socket));
       socket.emit('join', user);
       socket.on('typing', (user) => {
-        console.log('event', user);
+        dispatch(senderTyping(user));
       });
       socket.on('friends', (friends) => {
         console.log('friends', friends);

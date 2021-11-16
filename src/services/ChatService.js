@@ -10,6 +10,42 @@ const ChatService = {
         throw err;
       });
   },
+  uploadImage: (data) => {
+    return API.post('/chats/upload-image', data)
+      .then((res) => {
+        return res.data.url;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+  paginateMessage: (id, page) => {
+    return API.get('/chats/messages', {
+      params: {
+        id,
+        page,
+      },
+    })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+  searchUsers: (term) => {
+    return API.get('/users/search-users', {
+      params: {
+        term,
+      },
+    })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
 };
 
 export default ChatService;

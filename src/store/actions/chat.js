@@ -7,6 +7,9 @@ export const FRIEND_ONLINE = 'FRIEND_ONLINE';
 export const FRIEND_OFFLINE = 'FRIEND_OFFLINE';
 export const SET_SOCKET = 'SET_SOCKET';
 export const RECIVED_MESSAGE = 'RECIVED_MESSAGE';
+export const TYPING = 'TYPING';
+export const PAGINATE_MESSAGES = 'PAGINATE_MESSAGES';
+export const INCREAMENT_SCROLL = 'INCREAMENT_SCROLL';
 
 export const fetchChats = () => (dispatch) => {
   return ChatService.fetchChats()
@@ -42,4 +45,23 @@ export const setSocket = (socket) => (dispatch) => {
 };
 export const recivedMessage = (message, userId) => (dispatch) => {
   dispatch({ type: RECIVED_MESSAGE, payload: { message, userId } });
+};
+export const senderTyping = (sender) => (dispatch) => {
+  dispatch({ type: TYPING, payload: sender });
+};
+export const paginateMessages = (id, page) => (dispatch) => {
+  return ChatService.paginateMessage(id, page).then(
+    ({ messages, pagination }) => {
+      if (typeof messages !== 'undefined' && messages.length > 0) {
+        messages.reverse();
+        const payload = { messages, id, pagination };
+        dispatch({ type: PAGINATE_MESSAGES, payload });
+        return true;
+      }
+      return false;
+    }
+  );
+};
+export const increamentScroll = () => (dispatch) => {
+  dispatch({ type: INCREAMENT_SCROLL });
 };

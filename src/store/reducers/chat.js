@@ -6,6 +6,9 @@ import {
   FRIEND_OFFLINE,
   SET_SOCKET,
   RECIVED_MESSAGE,
+  TYPING,
+  PAGINATE_MESSAGES,
+  INCREAMENT_SCROLL,
 } from '../actions/chat';
 const initialState = {
   chats: [],
@@ -13,6 +16,7 @@ const initialState = {
   socket: {},
   newMessage: { chatId: null, seen: null },
   scrollBottom: 0,
+  senderTyping: { typing: false },
 };
 
 const chatReducer = (state = initialState, action) => {
@@ -29,6 +33,8 @@ const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         currentChat: payload,
+        scrollBottom: state.scrollBottom + 1,
+        newMessage: { chatId: null, seen: null },
       };
     }
     case FRIENDS_ONLINE: {
@@ -149,6 +155,7 @@ const chatReducer = (state = initialState, action) => {
           chats: chatsCopy,
           currentChat: currentChatCopy,
           newMessage: newMessage,
+          senderTyping: { typing: false },
         };
       }
       return {
@@ -157,9 +164,56 @@ const chatReducer = (state = initialState, action) => {
         currentChat: currentChatCopy,
         newMessage: newMessage,
         scrollBottom,
+        senderTyping: { typing: false },
+      };
+    }
+    case TYPING: {
+      if (payload.typing) {
+        return {
+          ...state,
+          senderTyping: payload,
+          scrollBottom: state.scrollBottom + 1,
+        };
+      }
+      return {
+        ...state,
+        senderTyping: payload,
+      };
+    }
+    case PAGINATE_MESSAGES: {
+      const { messages, id, pagination } = payload;
+
+      let currentChatCopy = { ...state.currentChat };
+      const chatsCopy = state.chats.map((chat) => {
+        if (chat.id === +id) {
+          const shifted = [...messages, ...chat.Messages];
+          currentChatCopy = {
+            ...currentChatCopy,
+            Messages: shifted,
+            Pagination: pagination,
+          };
+          return {
+            ...chat,
+            Messages: shifted,
+            Pagination: pagination,
+          };
+        }
+        return chat;
+      });
+      return {
+        ...state,
+        chats: chatsCopy,
+        currentChat: currentChatCopy,
       };
     }
 
+    case INCREAMENT_SCROLL: {
+      return {
+        ...state,
+        scrollBottom: state.scrollBottom + 1,
+        newMessage: { chatId: null, seen: true },
+      };
+    }
     default: {
       return {
         ...state,

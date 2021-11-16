@@ -9,6 +9,7 @@ import {
   TYPING,
   PAGINATE_MESSAGES,
   INCREAMENT_SCROLL,
+  CREATE_CHAT,
 } from '../actions/chat';
 const initialState = {
   chats: [],
@@ -214,6 +215,15 @@ const chatReducer = (state = initialState, action) => {
         newMessage: { chatId: null, seen: true },
       };
     }
+
+    case CREATE_CHAT: {
+      console.log(payload);
+      return {
+        ...state,
+        chats: [...state.chats, ...[payload]],
+      };
+    }
+
     default: {
       return {
         ...state,

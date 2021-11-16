@@ -11,6 +11,8 @@ export default function FriendList() {
   const [suggestions, setSuggestions] = useState([]);
 
   const chats = useSelector((state) => state.chatReducer.chats);
+  const socket = useSelector((state) => state.chatReducer.socket);
+
   const openChat = (chat) => {
     dispatch(setCurrentChat(chat));
   };
@@ -18,7 +20,10 @@ export default function FriendList() {
     ChatService.searchUsers(e.target.value).then((res) => setSuggestions(res));
   };
   const addNewFriend = (id) => {
-    // dispatch
+    ChatService.createChat(id).then((res) => {
+      socket.emit('add-friend', res.data);
+      setShowFriendsModla(false);
+    });
   };
   return (
     <div id="friends" className="shadow-light">

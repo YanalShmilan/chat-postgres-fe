@@ -8,6 +8,7 @@ import {
   setSocket,
   recivedMessage,
   senderTyping,
+  createChat,
 } from '../../../store/actions/chat';
 function useSocket(user, dispatch) {
   useEffect(() => {
@@ -32,6 +33,9 @@ function useSocket(user, dispatch) {
       });
       socket.on('recived', (message) => {
         dispatch(recivedMessage(message));
+      });
+      socket.on('new-chat', (chat) => {
+        dispatch(createChat(chat));
       });
     });
   }, [dispatch]);
